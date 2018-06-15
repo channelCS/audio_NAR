@@ -7,6 +7,12 @@ import glob
 import config as cfg
 import os
 from string import digits
+import sys
+
+if sys.platform[:3]=='win':
+    splitr='\\'
+else:
+    splitr='/'
 
 def move_files():
     x=os.listdir(path)
@@ -33,7 +39,7 @@ cfg.CreateFolder(cfg.office_folder)
 cfg.CreateFolder(cfg.speech_folder)
 
 for f in glob.glob(cfg.orig_dataset_path):
-    g=f.split('\\')[-1]
+    g=f.split(splitr)[-1]
     if g in cfg.kitchen_array:
         cfg.MoveFolder(f, cfg.kitchen_folder+'/'+g)
     elif g in cfg.nonverbal_array:
@@ -50,9 +56,9 @@ move_files()
 
 #Delete DS_Store files
 for f in glob.glob(path+'/*'):
-    x=f.split('\\')[-1]
+    x=f.split(splitr)[-1]
     if x[-4:]!='.wav':
-        os.remove(path+'//'+x)
+        os.remove(path+'/'+x)
         
         
 #Generating the meta file
@@ -60,7 +66,7 @@ for f in glob.glob(path+'/*'):
 str1=''
 arr1=[]
 for f in glob.glob(path+'/*'):
-    x=f.split('\\')[1]
+    x=f.split(splitr)[1]
     res = x.translate(None, digits).split('.')[0].split('_')[0]
     arr1.append(res)
     str1+='audio/'+x+'\t'+res+'\n'
